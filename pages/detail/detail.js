@@ -1,32 +1,26 @@
-// pages/list/list.js
+// pages/detail/detail.js
 let datas = require('../../datas/list-data.js')
-//console.log(datas)
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    listArr:[]
+    detailObj:{},
+    index:null
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    //console.log(options);
+    // 获取参数下标
+    let index = options.index;
+    // 更新detailObj的状态值
     this.setData({
-      listArr:datas.list_data
-    })
-  },
-
-  // 点击跳转到detail
-  toDetail(event){
-    console.log(event)
-    // 获取点击跳转对应下标
-    let index = event.currentTarget.dataset.index;
-
-    wx.navigateTo({
-      url: '/pages/detail/detail?index='+index,
+      detailObj:datas.list_data[index],
+      index
     })
   },
 
