@@ -7,7 +7,8 @@ Page({
    */
   data: {
     detailObj:{},
-    index:null
+    index:null,
+    isCollected:false
   },
 
   /**
@@ -22,6 +23,21 @@ Page({
       detailObj:datas.list_data[index],
       index
     })
+
+    //是否收藏
+    let detailStorage = wx.getStorageSync('isCollected');
+    console.log(detailStorage);
+
+    if(!detailStorage){
+      //缓存中初始化空对象
+      wx.setStorageSync('isCollected', {})
+    }
+
+    if(detailStorage[index]){
+      this.setData({
+        isCollected:true
+      })
+    }
   },
 
   /**
@@ -71,5 +87,36 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  // 收藏
+  handleCollection(){
+    let isCollected = !this.data.isCollected;
+    this.setData({
+      isCollected
+    })
+    //提示用户
+    let title = isCollected?'收藏成功':'取消收藏'
+    wx.showToast({
+      title,
+      icon:'success'
+    })
+    //缓存数据到本地
+    //let obj = {};
+    wx.getStorage({
+      key: 'isCollected',
+      success: (datas) =>{
+        console.log(datas)
+        let obj = datas.data
+        obj[this.data.index] = isCollected;
+        wx.setStorage({
+          key: 'isCollected',
+          data: obj,
+          success: () => {
+            console.log('succ')
+          }
+        })
+      },
+    })
+   
   }
 })
