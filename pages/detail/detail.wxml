@@ -1,6 +1,7 @@
 <!--pages/detail/detail.wxml-->
 <view class='detailContainer'>
-  <image class='headImg' src='{{detailObj.detail_img}}'></image>
+  <image class='headImg' src='{{isMusicPlay? detailObj.music.coverImgUrl : detailObj.detail_img}}'></image>
+  <image class='muiscImg' catchtap='handleMusicPlay' src='{{isMusicPlay?"/images/music/music-start.png":"/images/music/music-stop.png"}}'></image>
   <view class='avatar_date'>
     <image src='{{detailObj.avatar}}'></image>
     <text>{{detailObj.author}}</text>
@@ -12,7 +13,7 @@
     <view class='collection_share'>
       <image catchtap='handleCollection' wx:if='{{!isCollected}}' src='/images/icon/collection-anti.png'></image>
       <image catchtap='handleCollection' wx:if='{{isCollected}}' src='/images/icon/collection.png'></image>
-      <image src='/images/icon/share.png'></image>
+      <image catchtap='handleShare' src='/images/icon/share.png'></image>
     </view>
     <view class='line'></view>
   </view>

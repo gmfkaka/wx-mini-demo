@@ -1,5 +1,8 @@
 // pages/detail/detail.js
 let datas = require('../../datas/list-data.js')
+let appDatas = getApp();
+//console.log(appDatas)
+
 Page({
 
   /**
@@ -8,7 +11,8 @@ Page({
   data: {
     detailObj:{},
     index:null,
-    isCollected:false
+    isCollected:false,
+    isMusicPlay:false
   },
 
   /**
@@ -38,6 +42,31 @@ Page({
         isCollected:true
       })
     }
+
+    //监听播放播放
+    wx.onBackgroundAudioPlay(()=>{
+      this.setData({
+        isMusicPlay:true
+      })
+      //修改appdata中的数据
+      appDatas.data.isPlay = true;
+      appDatas.data.pageIndex = index;
+    })
+
+    //判断是否在播放 
+    if(appDatas.data.isPlay && appDatas.data.pageIndex === index){
+      this.setData({
+        isMusicPlay: true
+      })
+    }
+
+    //监听音乐暂停
+    wx.onBackgroundAudioPause(()=>{
+      this.setData({
+        isMusicPlay: false
+      })
+      appDatas.data.isPlay = false;
+    })
   },
 
   /**
@@ -118,5 +147,33 @@ Page({
       },
     })
    
+  },
+
+  // 音乐播放
+  handleMusicPlay(){
+    console.log("rinima")
+    let isMusicPlay = !this.isMusicPlay;
+    this.setData({
+      isMusicPlay
+    })
+    // 控制音乐播放
+    if(isMusicPlay){
+      let {dataUrl,title} = this.data.detailObj.music;
+      wx.playBackgroundAudio({
+        dataUrl,title
+      })
+    }else{
+      wx.stopBackgroundAudio();
+    }
+  },
+
+  // 分享
+  handleShare(){
+    wx.showActionSheet({
+      itemList: [
+        '分享到朋友圈','分享到微博','分享到qq空间'
+      ],
+    })
   }
+
 })
