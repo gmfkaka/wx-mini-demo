@@ -11,7 +11,7 @@ Page({
 
   // 点击跳转到list页面
   handlerClick(){
-    wx.navigateTo({
+    wx.switchTab({
       url: '/pages/list/list',
     })
   },
